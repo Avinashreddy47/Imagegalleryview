@@ -1,7 +1,6 @@
 import React,{ useState } from 'react';
 import { useHistory} from 'react-router-dom';
 import axios from 'axios';
-
 import './Login.css'
 const Login=()=>{
   const initialState = {
@@ -16,6 +15,9 @@ const Login=()=>{
 
     setUser({ ...user, [name]: value });
   };
+  const signup=async()=>{
+   
+  };
   const login = async () => {
     var formData = new FormData();
     formData.append("email", user.email);
@@ -26,31 +28,32 @@ const Login=()=>{
     var testify=user.password;
     localStorage.setItem("testify",JSON.stringify(testify));
    const response = await axios({
-      url: "http://localhost:801/login.php",
+      url: "http://localhost:8010/Desktop/react-proj/public/php-login-registration-api/login.php",
       method: "post",
       headers: {
         "Content-Type": "multipart/form-data",
       },
       data: formData,
     });
-  //  console.log(response.data);
-   // console.log(response.data.status);
-      if(response.data==="failure")
+  console.log(response.data[12]);
+      if(response.data[12]==="f")
       {
-
+        history.push('/');
+        
       }
       else{
       const  fData=new FormData();
       fData.append("email",user.email);
       const allImages = await axios({
-        url: "http://localhost:801/retreive.php",
+        url: "http://localhost:8010/Desktop/react-proj/public/php-login-registration-api/retreive.php",
         method: "post",
         headers: {
           "Content-Type": "multipart/form-data",
         },
         data: fData,
       });
-      console.log(allImages);
+     // console.log(allImages);
+     localStorage.setItem('allImages',JSON.stringify(allImages.data));
        history.push({
        pathname: "/upload",
        state :{
@@ -59,18 +62,29 @@ const Login=()=>{
       });
     }
   };
+//   const onClickSignIn = () => {
+//     history.push("/login");
+// }
+
+const onClickSignup = () => {
+    history.push("/Signup");
+}
   return (
    
-    <div className="row small-up-2 medium-up-3 large-up-4">
-    <div className="column">
-        <h2>Login page</h2>
+    <div className="body"> 
+        <h1 className="h1">Gallery view Project</h1>        
+        <h1 className="h1">Login page</h1>
+        <div className="login">
         {/* <label>Username</label>
         <input type="text" name="name" placeholder="name" onChange={this.onChange}/> */}
-      <label>Email</label>
-      <input type="text" name="email" placeholder="email" onChange={onChange}/>
-      <label>Password</label>
-      <input type="password" name="password" placeholder="password"  onChange={onChange}/>
-      <input type="submit" value="login" className="button" onClick={login}/>
+      
+      {/* <label for="login">Email</label> */}
+      Email
+      <input id="uname" type="text" name="email" placeholder="email" onChange={onChange}/>
+      Password
+      <input  id="pass" type="password" name="password" placeholder="password"  onChange={onChange}/>
+      <input type="button" id="log"  value="login"  onClick={login}/>
+      <input type="button" id="log" value="signup" onClick={onClickSignup}/>
     </div>
     </div>
 
